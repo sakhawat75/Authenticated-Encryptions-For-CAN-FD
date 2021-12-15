@@ -1,0 +1,32 @@
+
+# Install all required modules
+pip3 install pycrypto hmac
+
+
+Hi there,
+Yesterday I spent more than one hour reading the paper to understand exactly what the requirements are. I understand that CANCrypt has some approaches to try to guarantee some privacy on messages exchange.
+In the symmetric approach using AES-128 with HMAC SHA-256 the main idea consists of sharing security keys with a small number of devices, and only devices on this group can exchange private messages with each other. But all devices on this group can read all messages because all of them have the keys.
+So, I write code to simulate this situation. There are 2 groups with 3 ECU’s each, and one ECU that doesn't use any privacy.
+Group 1
+- ECU-01-group-1.py
+- ECU-02-group-1.py
+- ECU-03-group-1.py
+
+Group 2
+- ECU-21-group-2.py
+- ECU-22-group-2.py
+- ECU-23-group-2.py
+
+ECU-99-no-secure.py doesn’t have any privacy.
+
+To run the tests:
+1- Starts bus.py in one terminal
+   $ python3  bus.py
+2- Starts some ECU’s of each group and no secure ECU. Use one terminal for each ECU.
+   $ python3 ECU-01-group-1.py
+   $ python3 ECU-02-group-1.py
+   $ python3 ECU-21-group-2.py
+   $ python3 ECU-22-group-2.py
+   $ python3 ECU-99-no-secure.py
+
+When one message is sent on any ECU of group 1 all ECU’s of this group will authenticate and show the message. ECU’s of other groups will have problems to authenticate, and the no secure ECU will show the complete message that it receives, encrypted.
